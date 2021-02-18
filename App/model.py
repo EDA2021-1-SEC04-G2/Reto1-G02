@@ -34,15 +34,56 @@ assert cf
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
 """
-
 # Construccion de modelos
+
+def newCatalog():
+    """
+    Inicializa el catálogo de libros. Crea una lista vacia para guardar
+    todos los libros, adicionalmente, crea una lista vacia para los autores,
+    una lista vacia para los generos y una lista vacia para la asociación
+    generos y libros. Retorna el catalogo inicializado.
+    """
+    catalog = {'videos':None,
+               'categories': None,
+               'countries': None,
+               'categories_countries': None,
+               'tags': None}
+
+    catalog['videos'] = lt.newList()
+    catalog['categories'] = lt.newList('ARRAY_LIST')
+    catalog['countries'] = lt.newList('ARRAY_LIST')
+    catalog['tags'] = lt.newList('ARRAY_LIST')
+    return catalog
 
 # Funciones para agregar informacion al catalogo
 
+def addVideo(catalog, video):
+    lt.addLast(catalog['videos'], video)
+
+
+def addCategories(catalog, category):
+    lt.addLast(catalog['categories'], category)
+
+
+def addCountries(catalog, country):
+    lt.addLast(catalog['contries'], country)
+
+
+def addTags(catalog, tag):
+    lt.addLast(catalog['tags'], tag)
+
+
 # Funciones para creacion de datos
 
-# Funciones de consulta
+def newCategories(name,id):
+    """
+    Crea una nueva estructura para modelar los libros de
+    un autor y su promedio de ratings
+    """
+    category = {'name': "", "videos": None,"id": ""}
+    category['name'] = name
+    category['id'] = id
+    category['videos'] = lt.newList('ARRAY_LIST')
+    return category
 
-# Funciones utilizadas para comparar elementos dentro de una lista
 
-# Funciones de ordenamiento
