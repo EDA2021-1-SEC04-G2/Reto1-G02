@@ -34,7 +34,7 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-def printMenu():
+def print_menu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Encontrar mejores videos por categoría y país ")
@@ -43,18 +43,22 @@ def printMenu():
     print("5- Encontrar videos con más likes")
     print("0- Salir")
 
-def initCatalog():
+def init_catalog(list_type_number):
     """
     Inicializa el catalogo de videos
     """
-    return controller.initCatalog()
+    if list_type_number==1:
+        list_type="ARRAY_LIST"
+    else:
+        list_type="SINGLE_LINKED"
+    return controller.init_catalog(list_type)
 
 
-def loadData(catalog):
+def load_data(catalog):
     """
     Carga los libros en la estructura de datos
     """
-    controller.loadData(catalog)
+    controller.load_data(catalog)
 
 
 catalog = None
@@ -63,12 +67,16 @@ catalog = None
 Menu principal
 """
 while True:
-    printMenu()
+    print_menu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        print('Tipos de lista:')
+        print('1- Arreglo')
+        print('2- Simplimente encadenada')
+        list_type_number=int(input('Escoja que tipo de lista desea usar para cargar los datos del catálogo: '))
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
-        loadData(catalog)
+        catalog = init_catalog(list_type_number)
+        load_data(catalog)
         print('Se cargaron: ',lt.size(catalog['videos']), ' videos')
     elif int(inputs[0]) == 2:
         pass

@@ -36,7 +36,7 @@ los mismos.
 """
 # Construccion de modelos
 
-def newCatalog():
+def new_catalog(list_type):
     """
     Inicializa el catálogo de libros. Crea una lista vacia para guardar
     todos los libros, adicionalmente, crea una lista vacia para los autores,
@@ -49,33 +49,24 @@ def newCatalog():
                'categories_countries': None,
                'tags': None}
 
-    catalog['videos'] = lt.newList()
-    catalog['categories'] = lt.newList('ARRAY_LIST')
-    catalog['countries'] = lt.newList('ARRAY_LIST')
-    catalog['tags'] = lt.newList('ARRAY_LIST')
+    catalog['videos'] = lt.newList(list_type)
+    catalog['categories'] = lt.newList(list_type)
+    catalog['countries'] = lt.newList(list_type)
+    catalog['tags'] = lt.newList(list_type)
     return catalog
 
 # Funciones para agregar informacion al catalogo
 
-def addVideo(catalog, video):
+def add_video(catalog, video):
     lt.addLast(catalog['videos'], video)
 
 
-def addCategories(catalog, category):
+def add_category(catalog, category):
     lt.addLast(catalog['categories'], category)
-
-
-def addCountries(catalog, country):
-    lt.addLast(catalog['contries'], country)
-
-
-def addTags(catalog, tag):
-    lt.addLast(catalog['tags'], tag)
-
 
 # Funciones para creacion de datos
 
-def newCategories(name,id):
+def new_categories(name,id):
     """
     Crea una nueva estructura para modelar los libros de
     un autor y su promedio de ratings
