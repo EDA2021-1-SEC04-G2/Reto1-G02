@@ -26,8 +26,11 @@
 
 
 import config as cf
+import time
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import shellsort as shell
+from DISClib.Algorithms.Sorting import insertionsort as insertion
+from DISClib.Algorithms.Sorting import selectionsort as selection
 assert cf
 
 """
@@ -44,15 +47,10 @@ def new_catalog(list_type):
     generos y libros. Retorna el catalogo inicializado.
     """
     catalog = {'videos':None,
-               'categories': None,
-               'countries': None,
-               'categories_countries': None,
-               'tags': None}
+               'categories': None,}
 
     catalog['videos'] = lt.newList(list_type)
     catalog['categories'] = lt.newList(list_type)
-    catalog['countries'] = lt.newList(list_type)
-    catalog['tags'] = lt.newList(list_type)
     return catalog
 
 # Funciones para agregar informacion al catalogo
@@ -66,15 +64,24 @@ def add_category(catalog, category):
 
 # Funciones para creacion de datos
 
-def new_categories(name,id):
-    """
-    Crea una nueva estructura para modelar los libros de
-    un autor y su promedio de ratings
-    """
-    category = {'name': "", "videos": None,"id": ""}
-    category['name'] = name
-    category['id'] = id
-    category['videos'] = lt.newList('ARRAY_LIST')
-    return category
+#Funciones de comparación
 
+def cmp_videos_by_views(video1,video2):
+    return float(video1['views'])<float(video2['views'])
 
+# Funciones de ordenamiento
+
+def sort_videos(catalog, size, algorithm_type):
+    size=min(size,lt.size(catalog['videos']))
+    sub_list = lt.subList(catalog['videos'], 1, size)
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    if algorithm_type=='shell':
+        sorted_list=shell.sort(sub_list, cmp_videos_by_views)
+    if algorithm_type=='insertion':
+        sorted_list=insertion.sort(sub_list, cmp_videos_by_views)
+    if algorithm_type=='selection':
+        sorted_list=selection.sort(sub_list, cmp_videos_by_views)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return elapsed_time_mseg, sorted_list 

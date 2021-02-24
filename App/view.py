@@ -37,10 +37,11 @@ operación solicitada
 def print_menu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- Encontrar mejores videos por categoría y país ")
-    print("3- Encontrar videos tendencia por país")
-    print("4- Encontrar videos tendencia por categoría")
-    print("5- Encontrar videos con más likes")
+    print("2- Ordenar videos por vistas")
+    print("3- Encontrar mejores videos por categoría y país ")
+    print("4- Encontrar videos tendencia por país")
+    print("5- Encontrar videos tendencia por categoría")
+    print("6- Encontrar videos con más likes")
     print("0- Salir")
 
 def init_catalog(list_type_number):
@@ -61,6 +62,17 @@ def load_data(catalog):
     controller.load_data(catalog)
 
 
+def print_results(ord_videos, sample=10):
+    size = lt.size(ord_videos)
+    if size > sample:
+        print("Los primeros ", sample, " videos ordenados son:")
+        i=1
+        while i <= sample:
+            video = lt.getElement(ord_videos,i)
+            print('Titulo: ' + video['title'] + ' Canal: '+video['channel_title']+' Vistas: '+video['views'])
+            i+=1
+
+
 catalog = None
 
 """
@@ -79,7 +91,16 @@ while True:
         load_data(catalog)
         print('Se cargaron: ',lt.size(catalog['videos']), ' videos')
     elif int(inputs[0]) == 2:
-        pass
+        size = input("Indique tamaño de la muestra: ")
+        print('Tipos de algoritmos:')
+        print('1- Shell sort')
+        print('2- Insertion sort')
+        print('3- Selection sort')
+        algorithm_type_number=int(input('Escoja el tipo de algoritmo que desea usar para ordenar los videos: '))
+        result = controller.sort_videos(catalog, int(size),algorithm_type_number)
+        print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
+                                          str(result[0]))
+        print_results(result[1])
     elif int(inputs[0]) == 3:
         pass
     elif int(inputs[0]) == 4:

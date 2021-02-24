@@ -62,3 +62,13 @@ def load_categories(catalog):
     input_file = csv.DictReader(open(categoriesfile, encoding='utf-8'), delimiter='\t')
     for category in input_file:
         model.add_category(catalog, category)
+
+def sort_videos(catalog,size,algorithm_type_number):
+    if algorithm_type_number==1:
+        algorithm_type='shell'
+    if algorithm_type_number==2:
+        algorithm_type='insertion'
+    else:
+        algorithm_type='selection'
+    return model.sort_videos(catalog,size,algorithm_type)
+        
