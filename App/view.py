@@ -97,6 +97,7 @@ while True:
         print('2- Insertion sort')
         print('3- Selection sort')
         algorithm_type_number=int(input('Escoja el tipo de algoritmo que desea usar para ordenar los videos: '))
+        print("Ordenando videos por vistas...")
         result = controller.sort_videos(catalog, int(size),algorithm_type_number)
         print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
                                           str(result[0]))

@@ -47,7 +47,7 @@ def new_catalog(list_type):
     generos y libros. Retorna el catalogo inicializado.
     """
     catalog = {'videos':None,
-               'categories': None,}
+               'categories': None}
 
     catalog['videos'] = lt.newList(list_type)
     catalog['categories'] = lt.newList(list_type)
@@ -67,7 +67,7 @@ def add_category(catalog, category):
 #Funciones de comparación
 
 def cmp_videos_by_views(video1,video2):
-    return float(video1['views'])<float(video2['views'])
+    return float(video1['views'])>float(video2['views'])
 
 # Funciones de ordenamiento
 
