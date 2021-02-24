@@ -68,7 +68,7 @@ def sort_videos(catalog,size,algorithm_type_number):
         algorithm_type='shell'
     if algorithm_type_number==2:
         algorithm_type='insertion'
-    else:
+    if algorithm_type_number==3:
         algorithm_type='selection'
     return model.sort_videos(catalog,size,algorithm_type)
         
