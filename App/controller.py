@@ -70,5 +70,9 @@ def sort_videos(catalog,size,algorithm_type_number):
         algorithm_type='insertion'
     if algorithm_type_number==3:
         algorithm_type='selection'
+    if algorithm_type_number==4:
+        algorithm_type='quick'
+    if algorithm_type_number==5:
+        algorithm_type='merge'
     return model.sort_videos(catalog,size,algorithm_type)
         

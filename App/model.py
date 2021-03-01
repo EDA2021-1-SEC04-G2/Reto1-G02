@@ -27,12 +27,16 @@
 
 import config as cf
 import time
+import sys
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as shell
 from DISClib.Algorithms.Sorting import insertionsort as insertion
 from DISClib.Algorithms.Sorting import selectionsort as selection
+from DISClib.Algorithms.Sorting import quicksort as quick
+from DISClib.Algorithms.Sorting import mergesort as merge
 assert cf
-
+default_limit=1000
+sys.setrecursionlimit(default_limit*1000)
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
@@ -82,6 +86,10 @@ def sort_videos(catalog, size, algorithm_type):
         sorted_list=insertion.sort(sub_list, cmp_videos_by_views)
     if algorithm_type=='selection':
         sorted_list=selection.sort(sub_list, cmp_videos_by_views)
+    if algorithm_type=='quick':
+        sorted_list=quick.sort(sub_list, cmp_videos_by_views)
+    if algorithm_type=='merge':
+        sorted_list=merge.sort(sub_list, cmp_videos_by_views)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list 
