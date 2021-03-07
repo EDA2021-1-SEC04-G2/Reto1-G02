@@ -32,8 +32,8 @@ El controlador se encarga de mediar entre la vista y el modelo.
 
 # Inicialización del Catálogo de libros
 
-def init_catalog(list_type):
-    catalog = model.new_catalog(list_type)
+def init_catalog():
+    catalog = model.new_catalog()
     return catalog
 
 
@@ -41,38 +41,23 @@ def init_catalog(list_type):
 
 
 def load_data(catalog):
-  
     load_videos(catalog)
-    load_categories(catalog)
+    load_category_names(catalog)
 
 
 def load_videos(catalog):
-  
     videosfile = cf.data_dir + 'videos/videos-large.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.add_video(catalog, video)
 
 
-def load_categories(catalog):
-    """
-    Carga la información que asocia tags con libros.
-    """
-    categoriesfile = cf.data_dir + 'videos/category-id.csv'
-    input_file = csv.DictReader(open(categoriesfile, encoding='utf-8'), delimiter='\t')
+def load_category_names(catalog):
+    category_names_file = cf.data_dir + 'videos/category-id.csv'
+    input_file = csv.DictReader(open(category_names_file, encoding='utf-8'), delimiter='\t')
     for category in input_file:
-        model.add_category(catalog, category)
+        model.add_category_name(catalog, category)
 
-def sort_videos(catalog,size,algorithm_type_number):
-    if algorithm_type_number==1:
-        algorithm_type='shell'
-    if algorithm_type_number==2:
-        algorithm_type='insertion'
-    if algorithm_type_number==3:
-        algorithm_type='selection'
-    if algorithm_type_number==4:
-        algorithm_type='quick'
-    if algorithm_type_number==5:
-        algorithm_type='merge'
-    return model.sort_videos(catalog,size,algorithm_type)
+def get_most_view_videos(catalog,country_name,category_name):
+    return model.get_most_view_videos(catalog,country_name,category_name)
         

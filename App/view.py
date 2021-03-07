@@ -37,22 +37,17 @@ operación solicitada
 def print_menu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- Ordenar videos por vistas")
-    print("3- Encontrar mejores videos por categoría y país ")
-    print("4- Encontrar videos tendencia por país")
-    print("5- Encontrar videos tendencia por categoría")
-    print("6- Encontrar videos con más likes")
+    print("2- Encontrar videos con más vistas por categoría y país")
+    print("3- Encontrar videos tendencia por país")
+    print("4- Encontrar videos tendencia por categoría")
+    print("5- Encontrar videos con más likes")
     print("0- Salir")
 
-def init_catalog(list_type_number):
+def init_catalog():
     """
     Inicializa el catalogo de videos
     """
-    if list_type_number==1:
-        list_type="ARRAY_LIST"
-    else:
-        list_type="SINGLE_LINKED"
-    return controller.init_catalog(list_type)
+    return controller.init_catalog()
 
 
 def load_data(catalog):
@@ -63,15 +58,23 @@ def load_data(catalog):
 
 
 def print_results(ord_videos, sample=10):
-    size = lt.size(ord_videos)
-    if size > sample:
-        print("Los primeros ", sample, " videos ordenados son:")
-        i=1
-        while i <= sample:
-            video = lt.getElement(ord_videos,i)
-            print('Titulo: ' + video['title'] + ' Canal: '+video['channel_title']+' Vistas: '+video['views'])
-            i+=1
+    if ord_videos==None:
+        print('Parece que ingresó algún dato mal, vuelva a intentarlo')
+    else:
+         size = lt.size(ord_videos)
+         if size > sample:
+            print("Los primeros ", sample, " videos ordenados son:")
+            i=1
+            while i <= sample:
+                video = lt.getElement(ord_videos,i)
+                print('Titulo: ' + video['title'] + ' Canal: '+video['channel_title']+' Fecha de tendencia '+' Vistas: '+video['views'])
+                i+=1
 
+def print_categories(category_names):
+    size=lt.size(category_names)
+    for n in range(1,size+1):
+        category=lt.getElement(category_names,n)
+        print(category['id'],category['name'])
 
 catalog = None
 
@@ -82,28 +85,22 @@ while True:
     print_menu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        print('Tipos de lista:')
-        print('1- Arreglo')
-        print('2- Simplimente encadenada')
-        list_type_number=int(input('Escoja que tipo de lista desea usar para cargar los datos del catálogo: '))
         print("Cargando información de los archivos ....")
-        catalog = init_catalog(list_type_number)
+        catalog = init_catalog()
         load_data(catalog)
         print('Se cargaron: ',lt.size(catalog['videos']), ' videos')
+        print('El primer video cargado es: ' )
+        video=lt.getElement(catalog['videos'],1)
+        print('Titulo: ' + video['title'] + ' , Canal: '+video['channel_title']+' , Fecha de tendencia '+str(video['trending_date']))
+        print('País: '+video['country'] +' , Vistas: '+str(video['views'])+' , Likes: '+str(video['likes'])
+        +' , Dislikes: '+str(video['dislikes']))
+        print('Las categorías cargadas son: ')
+        print_categories(catalog['category_names'])
     elif int(inputs[0]) == 2:
-        size = input("Indique tamaño de la muestra: ")
-        print('Tipos de algoritmos:')
-        print('1- Shell sort')
-        print('2- Insertion sort')
-        print('3- Selection sort')
-        print('4- Quick sort')
-        print('5- Merge sort')
-        algorithm_type_number=int(input('Escoja el tipo de algoritmo que desea usar para ordenar los videos: '))
-        print("Ordenando videos por vistas...")
-        result = controller.sort_videos(catalog, int(size),algorithm_type_number)
-        print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
-                                          str(result[0]))
-        print_results(result[1])
+        country_name=input('Ingrese el nombre del país: ').lower()
+        category_name=' '+input('Ingrese el nombre de la categoría: ')
+        number=int(input('Buscando los TOP ?: '))
+        print_results(controller.get_most_view_videos(catalog,country_name,category_name),number)
     elif int(inputs[0]) == 3:
         pass
     elif int(inputs[0]) == 4:

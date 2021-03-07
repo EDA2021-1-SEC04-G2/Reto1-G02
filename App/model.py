@@ -43,53 +43,99 @@ los mismos.
 """
 # Construccion de modelos
 
-def new_catalog(list_type):
-    """
-    Inicializa el catálogo de libros. Crea una lista vacia para guardar
-    todos los libros, adicionalmente, crea una lista vacia para los autores,
-    una lista vacia para los generos y una lista vacia para la asociación
-    generos y libros. Retorna el catalogo inicializado.
-    """
+def new_catalog():
     catalog = {'videos':None,
-               'categories': None}
+               'category_names': None,
+               'countries':None,
+               'categories':None}
 
-    catalog['videos'] = lt.newList(list_type)
-    catalog['categories'] = lt.newList(list_type)
+    catalog['videos'] = lt.newList('ARRAY_LIST')
+    catalog['category_names'] = lt.newList('ARRAY_LIST')
+    catalog['countries']=lt.newList('ARRAY_LIST',cmpfunction=compare_countries)
+    catalog['categories']=lt.newList('ARRAY_LIST',cmpfunction=compare_categories)
     return catalog
 
 # Funciones para agregar informacion al catalogo
 
 def add_video(catalog, video):
     lt.addLast(catalog['videos'], video)
+    add_video_country(catalog,video['country'],video)
+    add_video_category(catalog,video['category_id'],video)
 
 
-def add_category(catalog, category):
-    lt.addLast(catalog['categories'], category)
+def add_video_country(catalog,country_name,video):
+    countries=catalog['countries']
+    poscountry = lt.isPresent(countries, country_name)
+    if poscountry > 0:
+        country = lt.getElement(countries, poscountry)
+    else:
+        country = new_country(country_name)
+        lt.addLast(countries, country)
+    lt.addLast(country['videos'], video)
+
+def add_video_category(catalog,category_id,video):
+    categories=catalog['categories']
+    poscategory = lt.isPresent(categories, category_id)
+    if poscategory > 0:
+        category = lt.getElement(categories, poscategory)
+    else:
+        category = new_category(category_id)
+        lt.addLast(categories, category)
+    lt.addLast(category['videos'], video)
+
+def add_category_name(catalog, category):
+    category=new_category_name(category['name'],category['id'])
+    lt.addLast(catalog['category_names'], category)
 
 # Funciones para creacion de datos
+def new_country(name):
+    country={'name':None,'videos':None}
+    country['name']=name
+    country['videos']=lt.newList('ARRAY_LIST')
+    return country
+
+def new_category(id):
+    category={'id':None,'videos':None}
+    category['id']=id
+    category['videos']=lt.newList('ARRAY_LIST')
+    return category
+
+def new_category_name(name,id):  
+    return {'name':name,'id':id}
 
 #Funciones de comparación
 
 def cmp_videos_by_views(video1,video2):
     return float(video1['views'])>float(video2['views'])
 
+def compare_countries(country_name,country):
+    if country_name == country['name']:
+        return 0
+    return -1
+
+def compare_categories(category_id,category):
+    if category_id == category['id']:
+        return 0
+    return -1
+
 # Funciones de ordenamiento
 
-def sort_videos(catalog, size, algorithm_type):
-    size=min(size,lt.size(catalog['videos']))
-    sub_list = lt.subList(catalog['videos'], 1, size)
-    sub_list = sub_list.copy()
-    start_time = time.process_time()
-    if algorithm_type=='shell':
-        sorted_list=shell.sort(sub_list, cmp_videos_by_views)
-    if algorithm_type=='insertion':
-        sorted_list=insertion.sort(sub_list, cmp_videos_by_views)
-    if algorithm_type=='selection':
-        sorted_list=selection.sort(sub_list, cmp_videos_by_views)
-    if algorithm_type=='quick':
-        sorted_list=quick.sort(sub_list, cmp_videos_by_views)
-    if algorithm_type=='merge':
-        sorted_list=merge.sort(sub_list, cmp_videos_by_views)
-    stop_time = time.process_time()
-    elapsed_time_mseg = (stop_time - start_time)*1000
-    return elapsed_time_mseg, sorted_list 
+
+# Funciones de consulta
+def get_most_view_videos(catalog,country_name,category_name):
+    category_id=0
+    for i in range(1,lt.size(catalog['category_names'])):
+        category=lt.getElement(catalog['category_names'],i)
+        if category_name==category['name']:
+            category_id=category['id']
+    videos_country_category=lt.newList('ARRAY_LIST')
+    countries=catalog['countries']
+    poscountry = lt.isPresent(countries, country_name)
+    if category_id*poscountry==0:
+        return None
+    country = lt.getElement(countries, poscountry)
+    for j in range(1,lt.size(country['videos'])):
+        video=lt.getElement(country['videos'],j)
+        if video['category_id']==category_id:
+            lt.addLast(videos_country_category,video)
+    return merge.sort(videos_country_category,cmp_videos_by_views)
