@@ -60,4 +60,10 @@ def load_category_names(catalog):
 
 def get_most_view_videos(catalog,country_name,category_name):
     return model.get_most_view_videos(catalog,country_name,category_name)
+
+def get_most_time_trending_country(catalog,country_name):
+    return model.get_most_time_trending_country(catalog,country_name)
+
+def get_most_time_trending_category(catalog,category_name):
+    return model.get_most_time_trending_category(catalog,category_name)
         

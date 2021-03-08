@@ -102,9 +102,11 @@ while True:
         number=int(input('Buscando los TOP ?: '))
         print_results(controller.get_most_view_videos(catalog,country_name,category_name),number)
     elif int(inputs[0]) == 3:
-        pass
+        country_name=input('Ingrese el nombre del país: ').lower()
+        print(controller.get_most_time_trending_country(catalog,country_name))
     elif int(inputs[0]) == 4:
-        pass
+        category_name=input('Ingrese el nombre de la categoría: ').lower()
+        print(controller.get_most_time_trending_category(catalog,category_name))
     elif int(inputs[0]) == 5:
         pass
     else:

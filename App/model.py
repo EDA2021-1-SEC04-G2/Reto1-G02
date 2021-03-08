@@ -113,6 +113,11 @@ def compare_countries(country_name,country):
         return 0
     return -1
 
+def compare_videos(video_id,video):
+    if video_id==video['video_id']:
+        return 0
+    return -1
+
 def compare_categories(category_id,category):
     if category_id == category['id']:
         return 0
@@ -124,18 +129,75 @@ def compare_categories(category_id,category):
 # Funciones de consulta
 def get_most_view_videos(catalog,country_name,category_name):
     category_id=0
-    for i in range(1,lt.size(catalog['category_names'])):
+    for i in range(1,lt.size(catalog['category_names'])+1):
         category=lt.getElement(catalog['category_names'],i)
         if category_name==category['name']:
             category_id=category['id']
     videos_country_category=lt.newList('ARRAY_LIST')
     countries=catalog['countries']
-    poscountry = lt.isPresent(countries, country_name)
-    if category_id*poscountry==0:
+    poscountry = lt.isPresent(countries,country_name)
+    if category_id==0 or poscountry==0:
         return None
+    else:
+        country = lt.getElement(countries, poscountry)
+        for j in range(1,lt.size(country['videos'])+1):
+            video=lt.getElement(country['videos'],j)
+            if video['category_id']==category_id:
+                 lt.addLast(videos_country_category,video)
+        return merge.sort(videos_country_category,cmp_videos_by_views)
+
+def get_most_time_trending_country(catalog,country_name):
+    countries=catalog['countries']
+    poscountry = lt.isPresent(countries,country_name)
     country = lt.getElement(countries, poscountry)
-    for j in range(1,lt.size(country['videos'])):
-        video=lt.getElement(country['videos'],j)
-        if video['category_id']==category_id:
-            lt.addLast(videos_country_category,video)
-    return merge.sort(videos_country_category,cmp_videos_by_views)
+    country_videos=country['videos']
+    trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos)
+    size=lt.size(country_videos)
+    for i in range(1,size+1):
+        video=lt.getElement(country_videos,i)
+        posvideo=lt.isPresent(trending_counter,video['video_id'])
+        if posvideo==0:
+            video_trending={'video_id':video['video_id'],'title':video['title'],'counter':1,'channel_title':video['channel_title'],'country':country_name}
+            lt.addLast(trending_counter,video_trending)
+        else:
+            video_trending=lt.getElement(trending_counter,posvideo)
+            video_trending['counter']+=1
+    x=0
+    more_trending=None
+    for j in range(1,lt.size(trending_counter)+1):
+        video=lt.getElement(trending_counter,j)
+        if video['counter']>x:
+            x=video['counter']
+            more_trending=video
+    return more_trending
+        
+def get_most_time_trending_category(catalog,category_name):
+    category_id=0
+    for i in range(1,lt.size(catalog['category_names'])+1):
+        category=lt.getElement(catalog['category_names'],i)
+        if category_name==category['name']:
+            category_id=category['id']
+    categories=catalog['categories']
+    poscategory = lt.isPresent(categories,category_id)
+    category = lt.getElement(categories, poscategory)
+    category_videos=category['videos']
+    trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos)
+    size=lt.size(category_videos)
+    for i in range(1,size+1):
+        video=lt.getElement(category_videos,i)
+        posvideo=lt.isPresent(trending_counter,video['video_id'])
+        if posvideo==0:
+            video_trending={'video_id':video['video_id'],'title':video['title'],'counter':1,'channel_title':video['channel_title']}
+            lt.addLast(trending_counter,video_trending)
+        else:
+            video_trending=lt.getElement(trending_counter,posvideo)
+            video_trending['counter']+=1
+    x=0
+    more_trending=None
+    for j in range(1,lt.size(trending_counter)+1):
+        video=lt.getElement(trending_counter,j)
+        if video['counter']>x:
+            x=video['counter']
+            more_trending=video
+    return more_trending
+        
