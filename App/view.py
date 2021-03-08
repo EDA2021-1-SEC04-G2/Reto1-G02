@@ -105,7 +105,7 @@ while True:
         country_name=input('Ingrese el nombre del país: ').lower()
         print(controller.get_most_time_trending_country(catalog,country_name))
     elif int(inputs[0]) == 4:
-        category_name=input('Ingrese el nombre de la categoría: ').lower()
+        category_name=' '+input('Ingrese el nombre de la categoría: ')
         print(controller.get_most_time_trending_category(catalog,category_name))
     elif int(inputs[0]) == 5:
         pass

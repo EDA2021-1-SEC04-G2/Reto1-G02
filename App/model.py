@@ -113,8 +113,13 @@ def compare_countries(country_name,country):
         return 0
     return -1
 
-def compare_videos(video_id,video):
+def compare_videos_by_id(video_id,video):
     if video_id==video['video_id']:
+        return 0
+    return -1
+
+def compare_videos_by_title(video_title,video):
+    if video_title==video['title']:
         return 0
     return -1
 
@@ -127,12 +132,16 @@ def compare_categories(category_id,category):
 
 
 # Funciones de consulta
-def get_most_view_videos(catalog,country_name,category_name):
+def get_category_id(catalog,category_name):
     category_id=0
     for i in range(1,lt.size(catalog['category_names'])+1):
         category=lt.getElement(catalog['category_names'],i)
         if category_name==category['name']:
             category_id=category['id']
+    return category_id
+
+def get_most_view_videos(catalog,country_name,category_name):
+    category_id=get_category_id(catalog,category_name)
     videos_country_category=lt.newList('ARRAY_LIST')
     countries=catalog['countries']
     poscountry = lt.isPresent(countries,country_name)
@@ -151,7 +160,7 @@ def get_most_time_trending_country(catalog,country_name):
     poscountry = lt.isPresent(countries,country_name)
     country = lt.getElement(countries, poscountry)
     country_videos=country['videos']
-    trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos)
+    trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos_by_id)
     size=lt.size(country_videos)
     for i in range(1,size+1):
         video=lt.getElement(country_videos,i)
@@ -172,22 +181,18 @@ def get_most_time_trending_country(catalog,country_name):
     return more_trending
         
 def get_most_time_trending_category(catalog,category_name):
-    category_id=0
-    for i in range(1,lt.size(catalog['category_names'])+1):
-        category=lt.getElement(catalog['category_names'],i)
-        if category_name==category['name']:
-            category_id=category['id']
+    category_id=get_category_id(catalog,category_name)
     categories=catalog['categories']
     poscategory = lt.isPresent(categories,category_id)
     category = lt.getElement(categories, poscategory)
     category_videos=category['videos']
-    trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos)
+    trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos_by_title)
     size=lt.size(category_videos)
     for i in range(1,size+1):
         video=lt.getElement(category_videos,i)
-        posvideo=lt.isPresent(trending_counter,video['video_id'])
+        posvideo=lt.isPresent(trending_counter,video['title'])
         if posvideo==0:
-            video_trending={'video_id':video['video_id'],'title':video['title'],'counter':1,'channel_title':video['channel_title']}
+            video_trending={'video_id':video['video_id'],'title':video['title'],'counter':1,'channel_title':video['channel_title'],'categoría':category_id}
             lt.addLast(trending_counter,video_trending)
         else:
             video_trending=lt.getElement(trending_counter,posvideo)
