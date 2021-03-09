@@ -67,7 +67,8 @@ def print_results(ord_videos, sample=10):
             i=1
             while i <= sample:
                 video = lt.getElement(ord_videos,i)
-                print('Titulo: ' + video['title'] + ' Canal: '+video['channel_title']+' Fecha de tendencia '+' Vistas: '+video['views'])
+                print('Titulo: ' + video['title'] + ' Canal: '+video['channel_title']+' Vistas: '+video['views']
+                +' Likes ',video['likes'],video['tags'])
                 i+=1
 
 def print_categories(category_names):
@@ -108,7 +109,9 @@ while True:
         category_name=' '+input('Ingrese el nombre de la categoría: ')
         print(controller.get_most_time_trending_category(catalog,category_name))
     elif int(inputs[0]) == 5:
-        pass
+        tag=input('Ingrese el tag: ')
+        number=int(input('Quiere cononcer el TOP?: '))
+        print_results(controller.get_most_likes_tag(catalog,tag),number)
     else:
         sys.exit(0)
 sys.exit(0)

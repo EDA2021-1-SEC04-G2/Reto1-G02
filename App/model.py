@@ -108,6 +108,9 @@ def new_category_name(name,id):
 def cmp_videos_by_views(video1,video2):
     return float(video1['views'])>float(video2['views'])
 
+def cmp_videos_by_likes(video1,video2):
+    return float(video1['likes'])>float(video2['likes'])
+
 def compare_countries(country_name,country):
     if country_name == country['name']:
         return 0
@@ -128,13 +131,17 @@ def compare_categories(category_id,category):
         return 0
     return -1
 
+#def compare_counter(video1,video2):
+ #   return int(video1['counter'])>int(video2['counter'])
+
 # Funciones de ordenamiento
 
 
 # Funciones de consulta
 def get_category_id(catalog,category_name):
     category_id=0
-    for i in range(1,lt.size(catalog['category_names'])+1):
+    size=lt.size(catalog['category_names'])
+    for i in range(1,size+1):
         category=lt.getElement(catalog['category_names'],i)
         if category_name==category['name']:
             category_id=category['id']
@@ -178,6 +185,7 @@ def get_most_time_trending_country(catalog,country_name):
         if video['counter']>x:
             x=video['counter']
             more_trending=video
+    #more_trending=max(trending_counter,key=compare_counter)
     return more_trending
         
 def get_most_time_trending_category(catalog,category_name):
@@ -205,4 +213,14 @@ def get_most_time_trending_category(catalog,category_name):
             x=video['counter']
             more_trending=video
     return more_trending
-        
+    
+def get_most_likes_tag(catalog,tag):
+    videos=catalog['videos']
+    size=lt.size(videos)
+    tag_videos=lt.newList('ARRAY_LIST')
+    for i in range(1,size+1):
+        video=lt.getElement(videos,i)
+        video_tags=video['tags']
+        if tag in video_tags:
+            lt.addLast(tag_videos,video)
+    return merge.sort(tag_videos,cmp_videos_by_likes)
