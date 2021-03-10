@@ -67,5 +67,5 @@ def get_most_time_trending_country(catalog,country_name):
 def get_most_time_trending_category(catalog,category_name):
     return model.get_most_time_trending_category(catalog,category_name)
 
-def get_most_likes_tag(catalog,tag):
-    return model.get_most_likes_tag(catalog,tag)  
+def get_most_likes_tag(catalog,tag,country_name):
+    return model.get_most_likes_tag(catalog,tag,country_name)  

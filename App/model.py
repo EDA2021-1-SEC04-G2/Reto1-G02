@@ -29,6 +29,7 @@ import config as cf
 import time
 import sys
 from DISClib.ADT import list as lt
+from DISClib.DataStructures import listiterator as it
 from DISClib.Algorithms.Sorting import shellsort as shell
 from DISClib.Algorithms.Sorting import insertionsort as insertion
 from DISClib.Algorithms.Sorting import selectionsort as selection
@@ -169,6 +170,7 @@ def get_most_time_trending_country(catalog,country_name):
     country_videos=country['videos']
     trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos_by_id)
     size=lt.size(country_videos)
+    print('hola')
     for i in range(1,size+1):
         video=lt.getElement(country_videos,i)
         posvideo=lt.isPresent(trending_counter,video['video_id'])
@@ -178,6 +180,7 @@ def get_most_time_trending_country(catalog,country_name):
         else:
             video_trending=lt.getElement(trending_counter,posvideo)
             video_trending['counter']+=1
+    print('chao')
     x=0
     more_trending=None
     for j in range(1,lt.size(trending_counter)+1):
@@ -185,7 +188,6 @@ def get_most_time_trending_country(catalog,country_name):
         if video['counter']>x:
             x=video['counter']
             more_trending=video
-    #more_trending=max(trending_counter,key=compare_counter)
     return more_trending
         
 def get_most_time_trending_category(catalog,category_name):
@@ -200,7 +202,7 @@ def get_most_time_trending_category(catalog,category_name):
         video=lt.getElement(category_videos,i)
         posvideo=lt.isPresent(trending_counter,video['title'])
         if posvideo==0:
-            video_trending={'video_id':video['video_id'],'title':video['title'],'counter':1,'channel_title':video['channel_title'],'categoría':category_id}
+            video_trending={'video_id':video['video_id'],'title':video['title'],'counter':1,'channel_title':video['channel_title'],'category_id':category_id}
             lt.addLast(trending_counter,video_trending)
         else:
             video_trending=lt.getElement(trending_counter,posvideo)
@@ -214,13 +216,13 @@ def get_most_time_trending_category(catalog,category_name):
             more_trending=video
     return more_trending
     
-def get_most_likes_tag(catalog,tag):
+def get_most_likes_tag(catalog,tag,country_name):
     videos=catalog['videos']
     size=lt.size(videos)
-    tag_videos=lt.newList('ARRAY_LIST')
+    tag_country_videos=lt.newList('ARRAY_LIST')
     for i in range(1,size+1):
         video=lt.getElement(videos,i)
         video_tags=video['tags']
-        if tag in video_tags:
-            lt.addLast(tag_videos,video)
-    return merge.sort(tag_videos,cmp_videos_by_likes)
+        if tag in video_tags and video['country']==country_name:
+            lt.addLast(tag_country_videos,video)
+    return merge.sort(tag_country_videos,cmp_videos_by_likes)

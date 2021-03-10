@@ -111,7 +111,8 @@ while True:
     elif int(inputs[0]) == 5:
         tag=input('Ingrese el tag: ')
         number=int(input('Quiere cononcer el TOP?: '))
-        print_results(controller.get_most_likes_tag(catalog,tag),number)
+        country_name=input('Ingrese el pais: ')
+        print_results(controller.get_most_likes_tag(catalog,tag,country_name),number)
     else:
         sys.exit(0)
 sys.exit(0)
