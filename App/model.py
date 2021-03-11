@@ -170,7 +170,7 @@ def get_most_time_trending_country(catalog,country_name):
     country_videos=country['videos']
     trending_counter=lt.newList('ARRAY_LIST', cmpfunction=compare_videos_by_id)
     size=lt.size(country_videos)
-    print('hola')
+
     for i in range(1,size+1):
         video=lt.getElement(country_videos,i)
         posvideo=lt.isPresent(trending_counter,video['video_id'])
@@ -180,7 +180,7 @@ def get_most_time_trending_country(catalog,country_name):
         else:
             video_trending=lt.getElement(trending_counter,posvideo)
             video_trending['counter']+=1
-    print('chao')
+
     x=0
     more_trending=None
     for j in range(1,lt.size(trending_counter)+1):

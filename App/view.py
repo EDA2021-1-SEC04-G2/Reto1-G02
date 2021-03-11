@@ -57,7 +57,7 @@ def load_data(catalog):
     controller.load_data(catalog)
 
 
-def print_results(ord_videos, sample=10):
+def print_results_req1(ord_videos, sample=10):
     if ord_videos==None:
         print('Parece que ingresó algún dato mal, vuelva a intentarlo')
     else:
@@ -67,8 +67,25 @@ def print_results(ord_videos, sample=10):
             i=1
             while i <= sample:
                 video = lt.getElement(ord_videos,i)
-                print('Titulo: ' + video['title'] + ' Canal: '+video['channel_title']+' Vistas: '+video['views']
-                +' Likes ',video['likes'],video['tags'])
+                print('El nombre del video numero '+str(i)+' es "' + video['title'] + '", el canal es "'+video['channel_title']+'", la fecha en la que estuvo en tendencia fue '+video['trending_date']+', la fecha de publicacion fue '+video['publish_time']+', y tuvo '+video['views']+' vistas, '
+                +video['likes']+' Likes, y '+video['dislikes']+' dislikes')
+                i+=1
+
+def print_results_req4(ord_videos, sample=10):
+    if ord_videos==None:
+        print('Parece que ingresó algún dato mal, vuelva a intentarlo')
+    else:
+         size = lt.size(ord_videos)
+         if size > sample:
+            print("Los primeros ", sample, " videos ordenados son:")
+            i=1
+            while i <= sample:
+                video = lt.getElement(ord_videos,i)
+                print('El nombre del video numero '+str(i)+' es "' + video['title'] + '", el canal es "'+video['channel_title']+'", la fecha de publicacion fue '+video['publish_time']+', tuvo '+video['views']+' vistas, '
+                +video['likes']+' Likes, y '+video['dislikes']+' dislikes')
+                print('')
+                print('los tags fueron: '+video['tags'])
+                print('________________________________________________')
                 i+=1
 
 def print_categories(category_names):
@@ -101,18 +118,21 @@ while True:
         country_name=input('Ingrese el nombre del país: ').lower()
         category_name=' '+input('Ingrese el nombre de la categoría: ')
         number=int(input('Buscando los TOP ?: '))
-        print_results(controller.get_most_view_videos(catalog,country_name,category_name),number)
+        print_results_req1(controller.get_most_view_videos(catalog,country_name,category_name),number)
     elif int(inputs[0]) == 3:
         country_name=input('Ingrese el nombre del país: ').lower()
-        print(controller.get_most_time_trending_country(catalog,country_name))
+        video = controller.get_most_time_trending_country(catalog,country_name)
+        print('El titulo del video es '+ video['title']+', el numero de dias en tendencia es '+str(video['counter'])+', el nombre del canal es '+video['channel_title']+' y el pais es '+country_name)
     elif int(inputs[0]) == 4:
         category_name=' '+input('Ingrese el nombre de la categoría: ')
-        print(controller.get_most_time_trending_category(catalog,category_name))
+        video = controller.get_most_time_trending_category(catalog,category_name)
+        print('El titulo del video es '+ video['title']+', el numero de dias en tendencia es '+str(video['counter'])+', el nombre del canal es '+video['channel_title']+' y el identificador de categoria es '+video['category_id'])
+
     elif int(inputs[0]) == 5:
         tag=input('Ingrese el tag: ')
         number=int(input('Quiere cononcer el TOP?: '))
         country_name=input('Ingrese el pais: ')
-        print_results(controller.get_most_likes_tag(catalog,tag,country_name),number)
+        print_results_req4(controller.get_most_likes_tag(catalog,tag,country_name),number)
     else:
         sys.exit(0)
 sys.exit(0)
