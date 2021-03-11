@@ -38,9 +38,9 @@ def print_menu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Encontrar videos con más vistas por categoría y país")
-    print("3- Encontrar videos tendencia por país")
-    print("4- Encontrar videos tendencia por categoría")
-    print("5- Encontrar videos con más likes")
+    print("3- Encontrar video más días en tendencia por país")
+    print("4- Encontrar video más días en tendencia por categoría")
+    print("5- Encontrar videos con más likes por tag y país")
     print("0- Salir")
 
 def init_catalog():
@@ -131,7 +131,7 @@ while True:
     elif int(inputs[0]) == 5:
         tag=input('Ingrese el tag: ')
         number=int(input('Quiere cononcer el TOP?: '))
-        country_name=input('Ingrese el pais: ')
+        country_name=input('Ingrese el pais: ').lower()
         print_results_req4(controller.get_most_likes_tag(catalog,tag,country_name),number)
     else:
         sys.exit(0)
